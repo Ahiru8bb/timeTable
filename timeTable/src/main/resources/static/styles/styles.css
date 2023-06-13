@@ -1,0 +1,15 @@
+body {
+    max-width: 1200px;
+    margin: auto;
+    text-align: center;
+}
+
+table {
+    margin: auto;
+    border-collapse: collapse;
+}
+
+td, th {
+    border: 1px solid;
+    padding: 1rem;
+}

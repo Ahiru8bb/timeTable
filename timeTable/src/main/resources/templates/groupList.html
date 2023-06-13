@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns="http://www.w3.org/1999/xhtml"
+xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>Список групп</title>
+
+    <link rel="stylesheet" href="./styles/styles.css">
+</head>
+
+<body>
+    <h1>Список групп</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Группа</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr th:each="group : ${groupList}" th:id="${group.id}">
+                <td th:text="${group.name}"></td>
+                <td><button class="delete" th:text="Удалить"></button></td>
+            </tr>
+
+            <tr id="form">
+                <td><input type="text" placeholder="Имя" class="name"></td>
+                <td><button class="create">Добавить</button></td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="./scripts/scriptGroup.js"></script>
+</body>
+
+</html>

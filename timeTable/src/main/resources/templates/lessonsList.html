@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8">
+<title th:text="'Расписание ' + (${type == 'teacher'} ? ${title} : ${title})">Рассписание ----- группы</title>
+
+<link rel="stylesheet" th:href="@{/styles/styles.css}">
+</head>
+
+<body th:class="${type} + ' ' + ${title}">
+	<h1 th:text="'Расписание ' + (${type == 'teacher'} ? ${title} : ${title})">Рассписание ---- группы</h1>
+
+	<table>
+		<thead>
+			<tr>
+				<th>N пары</th>
+				<th>Понидельник</th>
+				<th>Вторник</th>
+				<th>Среда</th>
+				<th>Четверг</th>
+				<th>Пятница</th>
+				<th>Суббота</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr th:each="lessonInString : ${timeTable}">
+				<td th:text="${lessonInString.key}"></td>
+				<td th:each="lesson : ${lessonInString.value}"
+					th:id="${lesson.value != null} ? ${lesson.value.id} : ${lessonInString.key} + '-' + ${lesson.key}" th:class="${lessonInString.key} + '-' + ${lesson.key}">
+					<div th:if="${lesson.value != null}">
+						<p th:text="${lesson.value.name}"></p>
+						<p
+							th:text="${lesson.value.teacher.name}"></p>
+						<p th:text="${lesson.value.group.name}"></p>
+						<button class="delete">Удалить</button>
+					</div>
+					<div th:unless="${lesson.value != null}">
+						<button class="create">Create</button>
+					</div>
+				</td>
+			</tr>
+
+		</tbody>
+	</table>
+
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+	<script th:src="@{/scripts/scriptLesson.js}"></script>
+</body>
+
+</html>
