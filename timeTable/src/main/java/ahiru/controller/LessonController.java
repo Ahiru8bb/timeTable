@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import ahiru.dao.GroupRepository;
-import ahiru.dao.LessonRepository;
-import ahiru.dao.TeacherRepository;
 import ahiru.model.Lesson;
 import ahiru.model.StudentGroup;
 import ahiru.model.Teacher;
+import ahiru.service.GroupService;
+import ahiru.service.LessonService;
+import ahiru.service.TeacherService;
 import ahiru.service.TimeTableService;
 
 @Controller
@@ -26,13 +26,13 @@ public class LessonController {
 	private TimeTableService timeTableService;
 
 	@Autowired
-	private LessonRepository lessonRepository;
+	private LessonService lessonService;
 
 	@Autowired
-	private TeacherRepository teacher;
+	private TeacherService teacher;
 
 	@Autowired
-	private GroupRepository groupRepository;
+	private GroupService groupService;
 
 	@GetMapping("/teachers/{id}")
 	public String lessonsOfTeacher(@PathVariable Integer id, Model model) {
@@ -58,7 +58,7 @@ public class LessonController {
 		model.addAttribute("timeTable", timeTable);
 		model.addAttribute("type", "group");
 		model.addAttribute("title",
-				groupRepository.findById(id).get().getName());
+				groupService.findById(id).get().getName());
 
 		return "lessonsList";
 	}
@@ -75,7 +75,7 @@ public class LessonController {
 		StudentGroup studentGroup = new StudentGroup();
 		studentGroup.setName("111");
 
-		this.groupRepository.save(studentGroup);
+		this.groupService.save(studentGroup);
 
 		Lesson lesson = new Lesson();
 		lesson.setDayOfWeek(DayOfWeek.MONDAY);
@@ -84,18 +84,18 @@ public class LessonController {
 		lesson.setGroup(studentGroup);
 		lesson.setTeacher(teacher);
 
-		this.lessonRepository.save(lesson);
+		this.lessonService.save(lesson);
 
 		studentGroup = new StudentGroup();
 		studentGroup.setName("211");
-		this.groupRepository.save(studentGroup);
+		this.groupService.save(studentGroup);
 		lesson = new Lesson();
 		lesson.setDayOfWeek(DayOfWeek.TUESDAY);
 		lesson.setName("Вт");
 		lesson.setNumberOfLesson(2);
 		lesson.setGroup(studentGroup);
 		lesson.setTeacher(teacher);
-		this.lessonRepository.save(lesson);
+		this.lessonService.save(lesson);
 
 		lesson = new Lesson();
 		lesson.setDayOfWeek(DayOfWeek.WEDNESDAY);
@@ -103,7 +103,7 @@ public class LessonController {
 		lesson.setNumberOfLesson(2);
 		lesson.setGroup(studentGroup);
 		lesson.setTeacher(teacher);
-		this.lessonRepository.save(lesson);
+		this.lessonService.save(lesson);
 
 		lesson = new Lesson();
 		lesson.setDayOfWeek(DayOfWeek.THURSDAY);
@@ -111,7 +111,7 @@ public class LessonController {
 		lesson.setNumberOfLesson(2);
 		lesson.setGroup(studentGroup);
 		lesson.setTeacher(teacher);
-		this.lessonRepository.save(lesson);
+		this.lessonService.save(lesson);
 
 		lesson = new Lesson();
 		lesson.setDayOfWeek(DayOfWeek.FRIDAY);
@@ -119,7 +119,7 @@ public class LessonController {
 		lesson.setNumberOfLesson(2);
 		lesson.setGroup(studentGroup);
 		lesson.setTeacher(teacher);
-		this.lessonRepository.save(lesson);
+		this.lessonService.save(lesson);
 
 		lesson = new Lesson();
 		lesson.setDayOfWeek(DayOfWeek.SATURDAY);
@@ -127,6 +127,6 @@ public class LessonController {
 		lesson.setNumberOfLesson(2);
 		lesson.setGroup(studentGroup);
 		lesson.setTeacher(teacher);
-		this.lessonRepository.save(lesson);
+		this.lessonService.save(lesson);
 	}
 }

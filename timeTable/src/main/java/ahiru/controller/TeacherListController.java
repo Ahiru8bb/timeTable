@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import ahiru.dao.TeacherRepository;
 import ahiru.model.Teacher;
+import ahiru.service.TeacherService;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -16,11 +16,11 @@ import lombok.extern.slf4j.Slf4j;
 public class TeacherListController {
 
 	@Autowired
-	private TeacherRepository teacherRepository;
+	private TeacherService teacherService;
 
 	@ModelAttribute(name = "teacherList")
 	public Iterable<Teacher> prepareData() {
-		Iterable<Teacher> teachers = teacherRepository.findAll();
+		Iterable<Teacher> teachers = teacherService.findAll();
 		log.info("Teachers = {}", teachers);
 		return teachers;
 	}

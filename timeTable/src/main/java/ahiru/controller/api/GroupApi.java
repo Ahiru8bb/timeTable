@@ -9,37 +9,35 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ahiru.dao.GroupRepository;
 import ahiru.model.StudentGroup;
+import ahiru.service.GroupService;
 
 @RestController
 @RequestMapping("/api/groups")
 public class GroupApi {
 
 	@Autowired
-	private GroupRepository groupRepository;
+	private GroupService groupService;
 
 	@GetMapping
 	public Iterable<StudentGroup> getStudentGroup() {
-		return groupRepository.findAll();
+		return groupService.findAll();
 	}
 
 	@GetMapping("{id}")
 	public StudentGroup getStudentGroupById(@PathVariable Integer id) {
-		return groupRepository.findById(id).get();
+		return groupService.findById(id).get();
 	}
 
 	@PostMapping
 	public StudentGroup postStudentGroup(
 			@RequestBody StudentGroup studentGroup) {
-		return groupRepository.save(studentGroup);
+		return groupService.save(studentGroup);
 	}
 
 	@DeleteMapping("{id}")
 	public StudentGroup deleteStudentGroup(@PathVariable Integer id) {
-		StudentGroup studentGroup = groupRepository.findById(id).get();
-		groupRepository.deleteById(id);
-		return studentGroup;
+		return groupService.deleteById(id);
 	}
 
 }

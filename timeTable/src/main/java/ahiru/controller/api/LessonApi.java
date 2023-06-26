@@ -12,40 +12,39 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ahiru.dao.GroupRepository;
-import ahiru.dao.LessonRepository;
-import ahiru.dao.TeacherRepository;
 import ahiru.model.Lesson;
 import ahiru.model.LessonForm;
 import ahiru.model.StudentGroup;
 import ahiru.model.Teacher;
+import ahiru.service.GroupService;
+import ahiru.service.LessonService;
+import ahiru.service.TeacherService;
 
 @RestController
 @RequestMapping("/api/lessons")
 public class LessonApi {
 
 	@Autowired
-	private LessonRepository lessonRepository;
+	private LessonService lessonService;
 
 	@Autowired
-	private GroupRepository groupRepository;
+	private GroupService groupService;
 
 	@Autowired
-	private TeacherRepository teacherRepository;
+	private TeacherService teacherService;
 
 	@GetMapping("{id}")
 	public Lesson getLessonById(@PathVariable Integer id) {
-		return lessonRepository.findById(id).get();
+		return lessonService.findById(id).get();
 	}
 
 	@GetMapping("/getFreeTeacher/{day}")
 	public List<Teacher> getFreeTeacher(@PathVariable String day) {
 		DayOfWeek dayOfWeek = DayOfWeek.valueOf(day.split("-")[1]);
 		Integer numberOfLesson = Integer.decode(day.split("-")[0]);
-		List<Teacher> teachers = (List<Teacher>) teacherRepository
-				.findAll();
+		List<Teacher> teachers = (List<Teacher>) teacherService.findAll();
 		for (int i = 0; i < teachers.size(); i++) {
-			List<Lesson> lessons = lessonRepository
+			List<Lesson> lessons = lessonService
 					.findAllLessonByTeacherId(teachers.get(i).getId());
 			for (Lesson lesson : lessons) {
 				if (lesson.getDayOfWeek() == dayOfWeek
@@ -63,12 +62,11 @@ public class LessonApi {
 	public List<StudentGroup> getFreeGroup(@PathVariable String day) {
 		DayOfWeek dayOfWeek = DayOfWeek.valueOf(day.split("-")[1]);
 		Integer numberOfLesson = Integer.decode(day.split("-")[0]);
-		List<StudentGroup> studentsGroup = (List<StudentGroup>) groupRepository
+		List<StudentGroup> studentsGroup = (List<StudentGroup>) groupService
 				.findAll();
 		for (int i = 0; i < studentsGroup.size(); i++) {
-			List<Lesson> lessons = lessonRepository
-					.findAllLessonByTeacherId(
-							studentsGroup.get(i).getId());
+			List<Lesson> lessons = lessonService.findAllLessonByTeacherId(
+					studentsGroup.get(i).getId());
 			for (Lesson lesson : lessons) {
 				if (lesson.getDayOfWeek() == dayOfWeek
 						&& lesson.getNumberOfLesson() == numberOfLesson) {
@@ -83,14 +81,14 @@ public class LessonApi {
 
 	@PostMapping
 	public Lesson postLesson(@RequestBody LessonForm lessonForm) {
-		return lessonRepository.save(
-				lessonForm.toLesson(groupRepository, teacherRepository));
+		return lessonService
+				.save(lessonForm.toLesson(groupService, teacherService));
 	}
 
 	@DeleteMapping("{id}")
 	public Lesson deleteLessonById(@PathVariable Integer id) {
-		Lesson lesson = lessonRepository.findById(id).get();
-		lessonRepository.deleteById(id);
+		Lesson lesson = lessonService.findById(id).get();
+		lessonService.deleteById(id);
 		return lesson;
 	}
 }

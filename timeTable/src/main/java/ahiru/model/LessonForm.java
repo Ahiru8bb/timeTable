@@ -2,8 +2,8 @@ package ahiru.model;
 
 import java.time.DayOfWeek;
 
-import ahiru.dao.GroupRepository;
-import ahiru.dao.TeacherRepository;
+import ahiru.service.GroupService;
+import ahiru.service.TeacherService;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,8 +16,8 @@ public class LessonForm {
 	private Integer teacher_id;
 	private Integer student_group;
 
-	public Lesson toLesson(GroupRepository groupRepository,
-			TeacherRepository teacherRepository) {
+	public Lesson toLesson(GroupService groupRepository,
+			TeacherService teacherRepository) {
 		log.info("TO LESSON!");
 		Teacher teacher = teacherRepository.findById(teacher_id).get();
 		StudentGroup studentGroup = groupRepository.findById(student_group)

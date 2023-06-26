@@ -6,19 +6,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import ahiru.dao.GroupRepository;
 import ahiru.model.StudentGroup;
+import ahiru.service.GroupService;
 
 @Controller
 @RequestMapping("/groupList")
 public class GroupListController {
 
 	@Autowired
-	private GroupRepository groupRepository;
+	private GroupService groupService;
 
 	@ModelAttribute(name = "groupList")
 	public Iterable<StudentGroup> prepareData() {
-		Iterable<StudentGroup> groups = groupRepository.findAll();
+		Iterable<StudentGroup> groups = groupService.findAll();
 		return groups;
 	}
 

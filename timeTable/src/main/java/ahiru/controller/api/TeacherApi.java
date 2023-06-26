@@ -9,35 +9,35 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ahiru.dao.TeacherRepository;
 import ahiru.model.Teacher;
+import ahiru.service.TeacherService;
 
 @RestController
 @RequestMapping("/api/teachers")
 public class TeacherApi {
 
 	@Autowired
-	private TeacherRepository teacherRepository;
+	private TeacherService teacherService;
 
 	@GetMapping
 	public Iterable<Teacher> getTeachers() {
-		return teacherRepository.findAll();
+		return teacherService.findAll();
 	}
 
 	@GetMapping("{id}")
 	public Teacher getTeacherById(@PathVariable Integer id) {
-		return teacherRepository.findById(id).get();
+		return teacherService.findById(id).get();
 	}
 
 	@PostMapping
 	public Teacher postTeacher(@RequestBody Teacher teacher) {
-		return teacherRepository.save(teacher);
+		return teacherService.save(teacher);
 	}
 
 	@DeleteMapping("{id}")
 	public Teacher deleteTeacher(@PathVariable Integer id) {
-		Teacher teacher = teacherRepository.findById(id).get();
-		teacherRepository.deleteById(id);
+		Teacher teacher = teacherService.findById(id).get();
+		teacherService.deleteById(id);
 		return teacher;
 	}
 }

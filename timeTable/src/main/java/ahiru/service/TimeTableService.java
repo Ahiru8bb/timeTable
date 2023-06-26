@@ -8,8 +8,8 @@ import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ahiru.dao.LessonRepository;
 import ahiru.model.Lesson;
+import ahiru.repository.LessonRepository;
 
 @Service
 public class TimeTableService {

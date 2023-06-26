@@ -1,4 +1,4 @@
-package ahiru.dao;
+package ahiru.repository;
 
 import java.util.List;
 
