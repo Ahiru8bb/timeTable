@@ -19,6 +19,8 @@ $(document).ready(function() {
 				$("#" + data["id"]).attr("id", newId);
 			},
 			error: function(e) {
+				console.log("DELETE = " + e);
+				console.log(e);
 			}
 		})
 	}
@@ -64,6 +66,7 @@ $(document).ready(function() {
 				$("#" + parentId).append('<button class="submit">Add</button>');
 			},
 			error: function(e) {
+				
 			}
 		})
 

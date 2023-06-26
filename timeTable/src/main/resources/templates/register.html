@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8">
+<title>Регистрация</title>
+
+<link rel="stylesheet" th:href="@{/styles/styles.css}">
+</head>
+
+<body>
+	<h1>Регистрация</h1>
+	<form method="post" th:action="@{/register}" id="registrrForm">
+		<input type="text" name="username" placeholder="username">
+		<input type="password" name="password" placeholder="password">
+		<input type="text" name="studentGroup" placeholder="studentGroup">
+		<input type="submit" value="register">
+	</form>
+</body>
+
+</html>

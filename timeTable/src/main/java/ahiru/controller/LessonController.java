@@ -4,6 +4,8 @@ import java.time.DayOfWeek;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,22 +13,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import ahiru.model.Lesson;
-import ahiru.model.StudentGroup;
-import ahiru.model.Teacher;
 import ahiru.service.GroupService;
-import ahiru.service.LessonService;
 import ahiru.service.TeacherService;
 import ahiru.service.TimeTableService;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequestMapping("/timeTable")
+@Slf4j
 public class LessonController {
 
 	@Autowired
 	private TimeTableService timeTableService;
-
-	@Autowired
-	private LessonService lessonService;
 
 	@Autowired
 	private TeacherService teacher;
@@ -37,96 +35,39 @@ public class LessonController {
 	@GetMapping("/teachers/{id}")
 	public String lessonsOfTeacher(@PathVariable Integer id, Model model) {
 
-		addInfo();
-
 		Map<Integer, Map<DayOfWeek, Lesson>> timeTable = timeTableService
 				.timeTableTeacher(id);
 		model.addAttribute("timeTable", timeTable);
 		model.addAttribute("type", "teacher");
 		model.addAttribute("title", teacher.findById(id).get().getName());
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		if (auth != null && auth.getAuthorities().stream()
+				.anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+			return "lessonsList";
+		} else {
 
-		return "lessonsList";
+			return "lessons";
+		}
+
 	}
 
 	@GetMapping("/groups/{id}")
 	public String lessonsOfGroup(@PathVariable Integer id, Model model) {
-
-		addInfo();
-
 		Map<Integer, Map<DayOfWeek, Lesson>> timeTable = timeTableService
 				.timeTableGroup(id);
 		model.addAttribute("timeTable", timeTable);
 		model.addAttribute("type", "group");
 		model.addAttribute("title",
 				groupService.findById(id).get().getName());
-
-		return "lessonsList";
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		if (auth != null && auth.getAuthorities().stream()
+				.anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+			return "lessonsList";
+		} else {
+			return "lessons";
+		}
 	}
 
-	private void addInfo() {
-		Teacher teacher = new Teacher();
-		teacher.setName("Ivan");
-		teacher.setPatronymic("Ivanovich");
-		teacher.setPhone("Nokia");
-		teacher.setSurname("Ivanovich");
-
-		this.teacher.save(teacher);
-
-		StudentGroup studentGroup = new StudentGroup();
-		studentGroup.setName("111");
-
-		this.groupService.save(studentGroup);
-
-		Lesson lesson = new Lesson();
-		lesson.setDayOfWeek(DayOfWeek.MONDAY);
-		lesson.setName("Пн");
-		lesson.setNumberOfLesson(1);
-		lesson.setGroup(studentGroup);
-		lesson.setTeacher(teacher);
-
-		this.lessonService.save(lesson);
-
-		studentGroup = new StudentGroup();
-		studentGroup.setName("211");
-		this.groupService.save(studentGroup);
-		lesson = new Lesson();
-		lesson.setDayOfWeek(DayOfWeek.TUESDAY);
-		lesson.setName("Вт");
-		lesson.setNumberOfLesson(2);
-		lesson.setGroup(studentGroup);
-		lesson.setTeacher(teacher);
-		this.lessonService.save(lesson);
-
-		lesson = new Lesson();
-		lesson.setDayOfWeek(DayOfWeek.WEDNESDAY);
-		lesson.setName("Ср");
-		lesson.setNumberOfLesson(2);
-		lesson.setGroup(studentGroup);
-		lesson.setTeacher(teacher);
-		this.lessonService.save(lesson);
-
-		lesson = new Lesson();
-		lesson.setDayOfWeek(DayOfWeek.THURSDAY);
-		lesson.setName("Чт");
-		lesson.setNumberOfLesson(2);
-		lesson.setGroup(studentGroup);
-		lesson.setTeacher(teacher);
-		this.lessonService.save(lesson);
-
-		lesson = new Lesson();
-		lesson.setDayOfWeek(DayOfWeek.FRIDAY);
-		lesson.setName("Пт");
-		lesson.setNumberOfLesson(2);
-		lesson.setGroup(studentGroup);
-		lesson.setTeacher(teacher);
-		this.lessonService.save(lesson);
-
-		lesson = new Lesson();
-		lesson.setDayOfWeek(DayOfWeek.SATURDAY);
-		lesson.setName("Сб");
-		lesson.setNumberOfLesson(2);
-		lesson.setGroup(studentGroup);
-		lesson.setTeacher(teacher);
-		this.lessonService.save(lesson);
-	}
 }

@@ -19,9 +19,11 @@ import ahiru.model.Teacher;
 import ahiru.service.GroupService;
 import ahiru.service.LessonService;
 import ahiru.service.TeacherService;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/api/lessons")
+@Slf4j
 public class LessonApi {
 
 	@Autowired
@@ -81,12 +83,14 @@ public class LessonApi {
 
 	@PostMapping
 	public Lesson postLesson(@RequestBody LessonForm lessonForm) {
+		log.info("Post lessons!");
 		return lessonService
 				.save(lessonForm.toLesson(groupService, teacherService));
 	}
 
 	@DeleteMapping("{id}")
 	public Lesson deleteLessonById(@PathVariable Integer id) {
+		log.info("DELETE LESSON id = {}", id);
 		Lesson lesson = lessonService.findById(id).get();
 		lessonService.deleteById(id);
 		return lesson;
